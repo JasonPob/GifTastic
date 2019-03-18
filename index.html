@@ -10,26 +10,67 @@
 
 <body>
     <h1>Food GIF Generator!!</h1>
+    <!-- place buttons here -->
+    <div id="buttonsView"></div>
+    <br>
+    <br>
+    <!-- GIFS will be placed here -->
     <div id="GIFS"></div>
-
+    <!-- button generator form -->
     <div id="buttonGenerator">
-        <form action="/action_page.php">
-            Search and add a type of food:<br>
-            <input type="text" value="">
-            <br>
-            <input type="submit" value="Submit">
-          </form> 
+        <form id="buttons">
+            <label for="buttonInput">Add a Food!</label>
+            <input type="text" id="buttonInput"><br><br>
+
+            <input id="add-food" type="submit" value="Add a Food!">
+        </form>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
         //Tasks
-        //1. Dynamically create buttons
-        //2. Link buttons to GIPHY API
-        //3. Show 10 GIF's per button and display picture and rating
+        //1. Initial array of food
+        //2. Dynamically create buttons
+        //3. Link buttons to GIPHY API
+        //4. Show 10 GIF's per button and display picture and rating
+
+
+        //Initial array of foods
+        var foods = ["Bacon", "Tacos", "Burgers", "Pancakes", "Sushi", "Pizza", "Pasta", "Grilled Cheese", "Donuts"]
+
+        function renderButtons() {
+            //empty buttons array before adding updated list
+            $("#buttonsView").empty();
+            //create buttons in food array
+            for (var i = 0; i < foods.length; i++) {
+                var a = $("<button>");
+                a.addClass("foods");
+                a.attr("data-name", foods[i]);
+                a.text(foods[i]);
+                //add button to HTML
+                $("#buttonsView").append(a);
+            }
+        }
+
+        //adding buttons to existing list
+        $("#add-food").on("click", function (event) {
+            event.preventDefault();
+          
+            //grab line from input box
+            var food = $("#buttonInput").val().trim();
+            //add food to foods array
+            foods.push(food);
+            renderButtons();
+        });
+
+
 
         //Adding click event listen listener to all buttons
-        $("button").on("click", function () {
+        $("#add-food").on("click", function () {
+            //prevent form from submitting itself
+            event.preventDefault();
+            //empty buttons before adding the updated list
+            $("#buttonsView").empty();
             //use data-search attr on click event
             var x = $(this).data("search");
             //make queryURL and pull 10 results using data-search
@@ -42,15 +83,17 @@
                         var foodDiv = $("<div>");
                         var p = $("<p>").text("Rating: " + response.data[i].rating);
                         var foodImage = $("<img>");
+                        foodImage.attr("data-name", foods[i]);
                         foodImage.attr("src", response.data[i].images.fixed_height.url);
                         foodDiv.append(p);
                         foodDiv.append(foodImage);
-                        $("GIFS").append(foodDiv);
+                        $("#GIFS").append(foodDiv);
                     }
                 })
-                
+
         });
 
+        renderButtons();
 
 
 
