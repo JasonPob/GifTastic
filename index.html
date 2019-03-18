@@ -55,7 +55,7 @@
         //adding buttons to existing list
         $("#add-food").on("click", function (event) {
             event.preventDefault();
-          
+
             //grab line from input box
             var food = $("#buttonInput").val().trim();
             //add food to foods array
@@ -63,6 +63,14 @@
             renderButtons();
         });
 
+        //capture food name
+        function alertFoodName() {
+            var foodName = $(this).attr("data-name");
+
+            alert(foodName);
+        }
+        //create functionality to buttons
+        $(document).on("click", ".foods", alertFoodName);
 
 
         //Adding click event listen listener to all buttons
@@ -90,6 +98,7 @@
                         $("#GIFS").append(foodDiv);
                     }
                 })
+            renderButtons();
 
         });
 
