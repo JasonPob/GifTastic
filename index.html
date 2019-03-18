@@ -14,8 +14,7 @@
     <div id="buttonsView"></div>
     <br>
     <br>
-    <!-- GIFS will be placed here -->
-    <div id="GIFS"></div>
+
     <!-- button generator form -->
     <div id="buttonGenerator">
         <form id="buttons">
@@ -25,6 +24,8 @@
             <input id="add-food" type="submit" value="Add a Food!">
         </form>
     </div>
+    <!-- GIFS will be placed here -->
+    <div id="GIFS"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
@@ -70,17 +71,15 @@
             alert(foodName);
         }
         //create functionality to buttons
-        $(document).on("click", ".foods", alertFoodName);
-
-
-        //Adding click event listen listener to all buttons
-        $("#add-food").on("click", function () {
+        $(document).on("click", ".foods", function () {
             //prevent form from submitting itself
             event.preventDefault();
             //empty buttons before adding the updated list
             $("#buttonsView").empty();
+            //empty GIFS div
+            $("#GIFS").empty();
             //use data-search attr on click event
-            var x = $(this).data("search");
+            var x = $(this).attr("data-name");
             //make queryURL and pull 10 results using data-search
             var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + x + "&api_key=E2JXP2YQb0vQRJcPrNRHyq54ZXyEwH3K&limit=10";
             //AJAX call
