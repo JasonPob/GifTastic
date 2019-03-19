@@ -29,16 +29,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
-        //Tasks
-        //1. Initial array of food
-        //2. Dynamically create buttons
-        //3. Link buttons to GIPHY API
-        //4. Show 10 GIF's per button and display picture and rating
-
 
         //Initial array of foods
         var foods = ["Bacon", "Tacos", "Burgers", "Pancakes", "Sushi", "Pizza", "Pasta", "Grilled Cheese", "Donuts"]
 
+        //create buttons
         function renderButtons() {
             //empty buttons array before adding updated list
             $("#buttonsView").empty();
@@ -56,7 +51,6 @@
         //adding buttons to existing list
         $("#add-food").on("click", function (event) {
             event.preventDefault();
-
             //grab line from input box
             var food = $("#buttonInput").val().trim();
             //add food to foods array
@@ -64,12 +58,6 @@
             renderButtons();
         });
 
-        //capture food name
-        function alertFoodName() {
-            var foodName = $(this).attr("data-name");
-
-            alert(foodName);
-        }
         //create functionality to buttons
         $(document).on("click", ".foods", function () {
             //prevent form from submitting itself
@@ -86,24 +74,43 @@
             $.ajax({ url: queryURL, method: "GET" })
                 .done(function (response) {
                     console.log(response);
+
                     for (var i = 0; i < response.data.length; i++) {
                         var foodDiv = $("<div>");
                         var p = $("<p>").text("Rating: " + response.data[i].rating);
                         var foodImage = $("<img>");
+                        foodImage.addClass("gif");
                         foodImage.attr("data-name", foods[i]);
-                        foodImage.attr("src", response.data[i].images.fixed_height.url);
+                        var animated = response.data[i].images.downsized.url;
+                        var stillImage = response.data[i].images.downsized_still.url;
+                        foodImage.attr("src", stillImage);
+                        foodImage.attr('data-still', stillImage);
+                        foodImage.attr('data-animates', animated);
+                        foodImage.attr('data-state', 'still');
                         foodDiv.append(p);
                         foodDiv.append(foodImage);
                         $("#GIFS").append(foodDiv);
+                        console.log(foodImage);
                     }
                 })
             renderButtons();
 
         });
 
+        //on click event to change source
+        $(document).on("click", ".gif", function () {
+            var state = $(this).attr("data-state");
+            if (state === "animates") {
+                $(this).attr("src", $(this).data("still"));
+                $(this).attr("data-state", "still");
+            }
+            else {
+                $(this).attr("src", $(this).data("animates"));
+                $(this).attr("data-state", "animates");
+            }
+        });
+
         renderButtons();
-
-
 
     </script>
 </body>
